@@ -26,6 +26,7 @@ netTransfer = trainNetwork(imdsTrain,layers,options);   %训练神经网络
 
 YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
 accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
+save('E:\github\CNN\net\m3.mat','netTransfer');
 
 
 
