@@ -1,7 +1,7 @@
 net = alexnet;
 
 changeSize;                %将库中的图片转化为需要的大小
-digitDatasetPath = fullfile('E:','github','CNN','data');		%指定样本库的路径
+digitDatasetPath = fullfile('.\','data');		%指定样本库的路径
 imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%建立样本库
 [imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %随机将样本库70%归入训练用例，剩余作为测试用例
 
@@ -26,7 +26,7 @@ netTransfer = trainNetwork(imdsTrain,layers,options);   %训练神经网络
 
 YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
 accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
-save('E:\github\CNN\net\m3.mat','netTransfer');
+%save('E:\github\CNN\net\m3.mat','netTransfer');
 
 
 

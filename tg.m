@@ -52,6 +52,11 @@ imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','f
 %clear all;
 load('-mat','E:\github\CNN\net\m3.mat');
 
+Img=imread('E:\github\CNN\good\0004.jpg');
+class=classify(netTransfer,Img);
+class
+
+
 % file=dir('E:\github\CNN\Validation\good\*.jpg');       %读取目标文件夹下的所有jpg文件
 % len=length(file);
 % for i=1:len                     %对每一个目标文件进行操作
@@ -63,16 +68,16 @@ load('-mat','E:\github\CNN\net\m3.mat');
 %     imwrite(Img,['E:\github\CNN\data\bad\' new_name '.jpg']);%存储图片
 % end
 
-YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
-for i=1:length(YPred)
-    if YPred(i) ~= imdsValidation.Labels(i)
-        figure
-        ko=imdsValidation.Files{i,1};
-        Img=imread(ko)
-        imshow(Img)
-    end
-end
-accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
+% YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
+% for i=1:length(YPred)
+%     if YPred(i) ~= imdsValidation.Labels(i)
+%         figure
+%         ko=imdsValidation.Files{i,1};
+%         Img=imread(ko)
+%         imshow(Img)
+%     end
+% end
+% accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
 
 
 
