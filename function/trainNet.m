@@ -37,13 +37,16 @@ options = trainingOptions('sgdm', ...   %神经网络的训练参数
     'ValidationFrequency',3, ...
     'Verbose',false, ...
     'Plots','training-progress');
+%'OutputFcn',@(info)stopIfAccuracyNotImproving(info,2)
+%可选用的输出函数参数，可以用这个函数查看训练时的中间变量
 
 netTransfer = trainNetwork(imdsTrain,layers,options);   %训练神经网络
 
 YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
 accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
-savefig('ssdd.fig');
-save(['.\net\' inputArg2 '.mat'],'netTransfer');
+resPic=findall(groot, 'Type', 'Figure');                %找出最后生成图片的句柄
+saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %保存训练的图片
+save(['.\net\' inputArg2 '.mat'],'netTransfer');        %保存训练好的网络
 
 
 
