@@ -1,4 +1,4 @@
-function f = trainNet(inputArg1,inputArg2,inputArg3)
+function f = trainNet(inputArg1,inputArg2,inputArg3,inputArg4,inputArg5)
 %功能： 用指定文件夹下的图片训练网络
 %参数： inputArg1：样本库所在的文件夹，默认是data
 %       inputArg2： 若要保存网络，则此处填写网络的名称，否则默认存储为temp网络，在下一次运行程序时会被覆盖
@@ -15,13 +15,31 @@ elseif nargin==2
     inputArg3=[227 227 3];
 end
 
+
+if inputArg4==1
+	functionLayer=reluLayer;
+elseif inputArg4==2
+	functionLayer=leakyReluLayer;
+elseif inputArg4==3
+	functionLayer=clippedReluLayer(10);
+end
+
+learnRate=inputArg5;
+
+replaceLayer=[3 7 11 13 15 18 21];
+
+
 net = alexnet;
 changeSize(inputArg1,inputArg3);                %将库中的图片转化为需要的大小
 digitDatasetPath = fullfile('.\',inputArg1);		%指定样本库的路径
 imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%建立样本库
 [imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %随机将样本库70%归入训练用例，剩余作为测试用例
 
+
 layersTransfer = net.Layers(1:end-3);               %保留原神经网络除最后3层外的其他部分
+for i=1:length(reluLayer)
+	layersTransfer(replaceLayer(i))=functionLayer;
+end
 numClasses = numel(categories(imdsTrain.Labels));   %获取类的数量
 layers = [                  %神经网络的层序结构
     layersTransfer
@@ -31,12 +49,12 @@ layers = [                  %神经网络的层序结构
 
 options = trainingOptions('sgdm', ...   %神经网络的训练参数
     'MiniBatchSize',10, ...
-    'MaxEpochs',6, ...
-    'InitialLearnRate',1e-4, ...
+    'MaxEpochs',8, ...					%迭代次数的最大值
+    'InitialLearnRate',learnRate, ...
     'ValidationData',imdsValidation, ...
     'ValidationFrequency',3, ...
-    'Verbose',false, ...
-    'Plots','training-progress');
+    'Verbose',false);
+
 %'OutputFcn',@(info)stopIfAccuracyNotImproving(info,2)
 %可选用的输出函数参数，可以用这个函数查看训练时的中间变量
 
@@ -44,13 +62,102 @@ netTransfer = trainNetwork(imdsTrain,layers,options);   %训练神经网络
 
 YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
 accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
-resPic=findall(groot, 'Type', 'Figure');                %找出最后生成图片的句柄
-saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %保存训练的图片
-save(['.\net\' inputArg2 '.mat'],'netTransfer');        %保存训练好的网络
+% resPic=findall(groot, 'Type', 'Figure');                %找出最后生成图片的句柄
+% saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %保存训练的图片
+% save(['.\net\' inputArg2 '.mat'],'netTransfer');        %保存训练好的网络
 
-
+f=accuracy;
 
 
 
 end
+
+
+
+% %-------------------------------------------------尝试改造构建函数--------------------------------------------
+% 
+% function f = trainNet(inputArg1,inputArg2,inputArg3)
+% %功能： 用指定文件夹下的图片训练网络
+% %参数： inputArg1：样本库所在的文件夹，默认是data
+% %       inputArg2： 若要保存网络，则此处填写网络的名称，否则默认存储为temp网络，在下一次运行程序时会被覆盖
+% %       inputArg3： 目标图片矩阵的大小，默认[227 227 3]
+% 
+% if nargin==0        %如果3个参数都缺失
+%     inputArg1='data';
+%     inputArg2='temp';
+%     inputArg3=[227 227 3];
+% elseif nargin==1    
+%     inputArg2='temp';
+%     inputArg3=[227 227 3];
+% elseif nargin==2 
+%     inputArg3=[227 227 3];
+% end
+% 
+% net = alexnet;
+% changeSize(inputArg1,inputArg3);                %将库中的图片转化为需要的大小
+% digitDatasetPath = fullfile('.\',inputArg1);		%指定样本库的路径
+% imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%建立样本库
+% [imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %随机将样本库70%归入训练用例，剩余作为测试用例
+% 
+% replace=[3 7 11 13 15 18 21];
+% layersTransfer = net.Layers(1:end-3);               %保留原神经网络除最后3层外的其他部分
+% numClasses = numel(categories(imdsTrain.Labels));   %获取类的数量
+% layers = [                  %神经网络的层序结构
+%     layersTransfer
+%     fullyConnectedLayer(numClasses,'WeightLearnRateFactor',10,'BiasLearnRateFactor',10)
+%     softmaxLayer
+%     classificationLayer];
+% for i=1:length(replace)
+%     layers(replace(i))=clippedReluLayer(10);
+% end
+% 
+% 
+% 
+% 
+% 
+% 
+% options = trainingOptions('sgdm', ...   %神经网络的训练参数
+%     'MiniBatchSize',10, ...
+%     'MaxEpochs',20, ...					%迭代次数的最大值
+%     'InitialLearnRate',1e-4, ...
+%     'ValidationData',imdsValidation, ...
+%     'ValidationFrequency',3, ...
+%     'Verbose',false, ...
+%     'Plots','training-progress');
+% %'OutputFcn',@(info)stopIfAccuracyNotImproving(info,2)
+% %可选用的输出函数参数，可以用这个函数查看训练时的中间变量
+% 
+% netTransfer = trainNetwork(imdsTrain,layers,options);   %训练神经网络
+% 
+% YPred = classify(netTransfer,imdsValidation);           %对测试样例进行识别
+% accuracy = mean(YPred == imdsValidation.Labels)         %输出最后识别的正确率
+% resPic=findall(groot, 'Type', 'Figure');                %找出最后生成图片的句柄
+% saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %保存训练的图片
+% save(['.\net\' inputArg2 '.mat'],'netTransfer');        %保存训练好的网络
+% 
+% 
+% 
+% 
+% 
+% end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
