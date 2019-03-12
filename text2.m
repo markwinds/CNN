@@ -2,20 +2,20 @@
 % % global zbt;
 % net = alexnet;
 % 
-% changeSize;                %½«¿âÖĞµÄÍ¼Æ¬×ª»¯ÎªĞèÒªµÄ´óĞ¡
-% digitDatasetPath = fullfile('.\','data');		%Ö¸¶¨Ñù±¾¿âµÄÂ·¾¶
-% imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%½¨Á¢Ñù±¾¿â
-% [imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %Ëæ»ú½«Ñù±¾¿â70%¹éÈëÑµÁ·ÓÃÀı£¬Ê£Óà×÷Îª²âÊÔÓÃÀı
+% changeSize;                %å°†åº“ä¸­çš„å›¾ç‰‡è½¬åŒ–ä¸ºéœ€è¦çš„å¤§å°
+% digitDatasetPath = fullfile('.\','data');		%æŒ‡å®šæ ·æœ¬åº“çš„è·¯å¾„
+% imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%å»ºç«‹æ ·æœ¬åº“
+% [imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %éšæœºå°†æ ·æœ¬åº“70%å½’å…¥è®­ç»ƒç”¨ä¾‹ï¼Œå‰©ä½™ä½œä¸ºæµ‹è¯•ç”¨ä¾‹
 % 
-% layersTransfer = net.Layers(1:end-3);               %±£ÁôÔ­Éñ¾­ÍøÂç³ı×îºó3²ãÍâµÄÆäËû²¿·Ö
-% numClasses = numel(categories(imdsTrain.Labels));   %»ñÈ¡ÀàµÄÊıÁ¿
-% layers = [                  %Éñ¾­ÍøÂçµÄ²ãĞò½á¹¹
+% layersTransfer = net.Layers(1:end-3);               %ä¿ç•™åŸç¥ç»ç½‘ç»œé™¤æœ€å3å±‚å¤–çš„å…¶ä»–éƒ¨åˆ†
+% numClasses = numel(categories(imdsTrain.Labels));   %è·å–ç±»çš„æ•°é‡
+% layers = [                  %ç¥ç»ç½‘ç»œçš„å±‚åºç»“æ„
 %     layersTransfer
 %     fullyConnectedLayer(numClasses,'WeightLearnRateFactor',10,'BiasLearnRateFactor',10)
 %     softmaxLayer
 %     classificationLayer];
 % 
-% options = trainingOptions('sgdm', ...   %Éñ¾­ÍøÂçµÄÑµÁ·²ÎÊı
+% options = trainingOptions('sgdm', ...   %ç¥ç»ç½‘ç»œçš„è®­ç»ƒå‚æ•°
 %     'MiniBatchSize',10, ...
 %     'MaxEpochs',6, ...
 %     'InitialLearnRate',1e-4, ...
@@ -25,12 +25,12 @@
 %     'Plots','training-progress',...
 %     'OutputFcn',@(info)stopIfAccuracyNotImproving(info,2));
 % 
-% netTransfer = trainNetwork(imdsTrain,layers,options);   %ÑµÁ·Éñ¾­ÍøÂç
+% netTransfer = trainNetwork(imdsTrain,layers,options);   %è®­ç»ƒç¥ç»ç½‘ç»œ
 % 
 %     zbt=findall(groot, 'Type', 'Figure');
 %     saveas(zbt,'hh.jpg');
-% YPred = classify(netTransfer,imdsValidation);           %¶Ô²âÊÔÑùÀı½øĞĞÊ¶±ğ
-% accuracy = mean(YPred == imdsValidation.Labels)         %Êä³ö×îºóÊ¶±ğµÄÕıÈ·ÂÊ
+% YPred = classify(netTransfer,imdsValidation);           %å¯¹æµ‹è¯•æ ·ä¾‹è¿›è¡Œè¯†åˆ«
+% accuracy = mean(YPred == imdsValidation.Labels)         %è¾“å‡ºæœ€åè¯†åˆ«çš„æ­£ç¡®ç‡
 % save('E:\github\CNN\net\temp1.mat','netTransfer');
 % 
 % 

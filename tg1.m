@@ -9,14 +9,14 @@ else
     outdata='bad';
 end
 
-obj = serial('com5','BaudRate',115200); %µÚÒ»¸öÊÇ´®¿ÚºÅ£¬ºóÃæÊÇ²¨ÌØÂÊ
-fclose(instrfind);  %Çå¿ÕÇ°ÖÃ×´Ì¬
-fopen(obj); %´ò¿ª´®¿Ú
-A = outdata; %Òª·¢ËÍµÄascallÂëÖµ¾ØÕó
-fwrite(obj,A); %°ÑAĞ´¹ıÈ¥
-% str = fscanf(obj);      %´Ó´®¿Úobj¶ÁÈ¡×Ö·û»ò×Ö·û´®(ASCIIÂë)ĞÎÊ½Êı¾İ£¬ÒÔ×Ö·ûÊı×éĞÎÊ½´æÓÚstr
-% fclose(obj);            % ¹Ø±Õ´®¿Ú
-% delete(obj);           % ÊÍ·Å´®¿Ú¶ÔÏóÕ¼ÓÃµÄÄÚ´æ¿Õ¼ä,
-% clear obj;              % ÊÍ·Å´®¿Ú¶ÔÏóÔÚMatlab¹¤×÷ÇøÖĞÕ¼ÓÃµÄ´æ´¢¿Õ¼ä
+obj = serial('com5','BaudRate',115200); %ç¬¬ä¸€ä¸ªæ˜¯ä¸²å£å·ï¼Œåé¢æ˜¯æ³¢ç‰¹ç‡
+fclose(instrfind);  %æ¸…ç©ºå‰ç½®çŠ¶æ€
+fopen(obj); %æ‰“å¼€ä¸²å£
+A = outdata; %è¦å‘é€çš„ascallç å€¼çŸ©é˜µ
+fwrite(obj,A); %æŠŠAå†™è¿‡å»
+% str = fscanf(obj);      %ä»ä¸²å£objè¯»å–å­—ç¬¦æˆ–å­—ç¬¦ä¸²(ASCIIç )å½¢å¼æ•°æ®ï¼Œä»¥å­—ç¬¦æ•°ç»„å½¢å¼å­˜äºstr
+% fclose(obj);            % å…³é—­ä¸²å£
+% delete(obj);           % é‡Šæ”¾ä¸²å£å¯¹è±¡å ç”¨çš„å†…å­˜ç©ºé—´,
+% clear obj;              % é‡Šæ”¾ä¸²å£å¯¹è±¡åœ¨Matlabå·¥ä½œåŒºä¸­å ç”¨çš„å­˜å‚¨ç©ºé—´
 
 

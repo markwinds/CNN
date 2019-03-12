@@ -1,10 +1,10 @@
 
 % net = alexnet;
 
-changeSize;                %½«¿âÖĞµÄÍ¼Æ¬×ª»¯ÎªĞèÒªµÄ´óĞ¡
-digitDatasetPath = fullfile('E:','github','CNN','data');		%Ö¸¶¨Ñù±¾¿âµÄÂ·¾¶
-imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%½¨Á¢Ñù±¾¿â
-%[imdsTrain,imdsValidation] = splitEachLabel(imds,0.1,'randomized');     %Ëæ»ú½«Ñù±¾¿â70%¹éÈëÑµÁ·ÓÃÀı£¬Ê£Óà×÷Îª²âÊÔÓÃÀı
+changeSize;                %å°†åº“ä¸­çš„å›¾ç‰‡è½¬åŒ–ä¸ºéœ€è¦çš„å¤§å°
+digitDatasetPath = fullfile('E:','github','CNN','data');		%æŒ‡å®šæ ·æœ¬åº“çš„è·¯å¾„
+imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%å»ºç«‹æ ·æœ¬åº“
+%[imdsTrain,imdsValidation] = splitEachLabel(imds,0.1,'randomized');     %éšæœºå°†æ ·æœ¬åº“70%å½’å…¥è®­ç»ƒç”¨ä¾‹ï¼Œå‰©ä½™ä½œä¸ºæµ‹è¯•ç”¨ä¾‹
 
 %clear all;
 load('-mat','E:\github\CNN\net\m3.mat');
@@ -14,7 +14,7 @@ load('-mat','E:\github\CNN\net\m3.mat');
 % class
 
 
-YPred = classify(netTransfer,imds);           %¶Ô²âÊÔÑùÀı½øĞĞÊ¶±ğ
+YPred = classify(netTransfer,imds);           %å¯¹æµ‹è¯•æ ·ä¾‹è¿›è¡Œè¯†åˆ«
 for i=1:length(YPred)
     if YPred(i) ~= imds.Labels(i)
         figure
@@ -28,7 +28,7 @@ for i=1:length(YPred)
         title(['Picture ' titleRoad1 '\' titleRoad2 ' is wrong!!']);
     end
 end
-accuracy = mean(YPred == imds.Labels)         %Êä³ö×îºóÊ¶±ğµÄÕıÈ·ÂÊ
+accuracy = mean(YPred == imds.Labels)         %è¾“å‡ºæœ€åè¯†åˆ«çš„æ­£ç¡®ç‡
 
 
 

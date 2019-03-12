@@ -1,10 +1,10 @@
 function f = trainNet(inputArg1,inputArg2,inputArg3)
-%¹¦ÄÜ£º ÓÃÖ¸¶¨ÎÄ¼ş¼ĞÏÂµÄÍ¼Æ¬ÑµÁ·ÍøÂç
-%²ÎÊı£º inputArg1£ºÑù±¾¿âËùÔÚµÄÎÄ¼ş¼Ğ£¬Ä¬ÈÏÊÇdata
-%       inputArg2£º ÈôÒª±£´æÍøÂç£¬Ôò´Ë´¦ÌîĞ´ÍøÂçµÄÃû³Æ£¬·ñÔòÄ¬ÈÏ´æ´¢ÎªtempÍøÂç£¬ÔÚÏÂÒ»´ÎÔËĞĞ³ÌĞòÊ±»á±»¸²¸Ç
-%       inputArg3£º Ä¿±êÍ¼Æ¬¾ØÕóµÄ´óĞ¡£¬Ä¬ÈÏ[227 227 3]
+%åŠŸèƒ½ï¼š ç”¨æŒ‡å®šæ–‡ä»¶å¤¹ä¸‹çš„å›¾ç‰‡è®­ç»ƒç½‘ç»œ
+%å‚æ•°ï¼š inputArg1ï¼šæ ·æœ¬åº“æ‰€åœ¨çš„æ–‡ä»¶å¤¹ï¼Œé»˜è®¤æ˜¯data
+%       inputArg2ï¼š è‹¥è¦ä¿å­˜ç½‘ç»œï¼Œåˆ™æ­¤å¤„å¡«å†™ç½‘ç»œçš„åç§°ï¼Œå¦åˆ™é»˜è®¤å­˜å‚¨ä¸ºtempç½‘ç»œï¼Œåœ¨ä¸‹ä¸€æ¬¡è¿è¡Œç¨‹åºæ—¶ä¼šè¢«è¦†ç›–
+%       inputArg3ï¼š ç›®æ ‡å›¾ç‰‡çŸ©é˜µçš„å¤§å°ï¼Œé»˜è®¤[227 227 3]
 
-if nargin==0        %Èç¹û3¸ö²ÎÊı¶¼È±Ê§
+if nargin==0        %å¦‚æœ3ä¸ªå‚æ•°éƒ½ç¼ºå¤±
     inputArg1='data';
     inputArg2='temp';
     inputArg3=[227 227 3];
@@ -16,20 +16,20 @@ elseif nargin==2
 end
 
 net = alexnet;
-changeSize(inputArg1,inputArg3);                %½«¿âÖĞµÄÍ¼Æ¬×ª»¯ÎªĞèÒªµÄ´óĞ¡
-digitDatasetPath = fullfile('.\',inputArg1);		%Ö¸¶¨Ñù±¾¿âµÄÂ·¾¶
-imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%½¨Á¢Ñù±¾¿â
-[imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %Ëæ»ú½«Ñù±¾¿â70%¹éÈëÑµÁ·ÓÃÀı£¬Ê£Óà×÷Îª²âÊÔÓÃÀı
+changeSize(inputArg1,inputArg3);                %å°†åº“ä¸­çš„å›¾ç‰‡è½¬åŒ–ä¸ºéœ€è¦çš„å¤§å°
+digitDatasetPath = fullfile('.\',inputArg1);		%æŒ‡å®šæ ·æœ¬åº“çš„è·¯å¾„
+imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%å»ºç«‹æ ·æœ¬åº“
+[imdsTrain,imdsValidation] = splitEachLabel(imds,0.7,'randomized');     %éšæœºå°†æ ·æœ¬åº“70%å½’å…¥è®­ç»ƒç”¨ä¾‹ï¼Œå‰©ä½™ä½œä¸ºæµ‹è¯•ç”¨ä¾‹
 
-layersTransfer = net.Layers(1:end-3);               %±£ÁôÔ­Éñ¾­ÍøÂç³ı×îºó3²ãÍâµÄÆäËû²¿·Ö
-numClasses = numel(categories(imdsTrain.Labels));   %»ñÈ¡ÀàµÄÊıÁ¿
-layers = [                  %Éñ¾­ÍøÂçµÄ²ãĞò½á¹¹
+layersTransfer = net.Layers(1:end-3);               %ä¿ç•™åŸç¥ç»ç½‘ç»œé™¤æœ€å3å±‚å¤–çš„å…¶ä»–éƒ¨åˆ†
+numClasses = numel(categories(imdsTrain.Labels));   %è·å–ç±»çš„æ•°é‡
+layers = [                  %ç¥ç»ç½‘ç»œçš„å±‚åºç»“æ„
     layersTransfer
     fullyConnectedLayer(numClasses,'WeightLearnRateFactor',10,'BiasLearnRateFactor',10)
     softmaxLayer
     classificationLayer];
 
-options = trainingOptions('sgdm', ...   %Éñ¾­ÍøÂçµÄÑµÁ·²ÎÊı
+options = trainingOptions('sgdm', ...   %ç¥ç»ç½‘ç»œçš„è®­ç»ƒå‚æ•°
     'MiniBatchSize',10, ...
     'MaxEpochs',6, ...
     'InitialLearnRate',1e-4, ...
@@ -38,15 +38,15 @@ options = trainingOptions('sgdm', ...   %Éñ¾­ÍøÂçµÄÑµÁ·²ÎÊı
     'Verbose',false, ...
     'Plots','training-progress');
 %'OutputFcn',@(info)stopIfAccuracyNotImproving(info,2)
-%¿ÉÑ¡ÓÃµÄÊä³öº¯Êı²ÎÊı£¬¿ÉÒÔÓÃÕâ¸öº¯Êı²é¿´ÑµÁ·Ê±µÄÖĞ¼ä±äÁ¿
+%å¯é€‰ç”¨çš„è¾“å‡ºå‡½æ•°å‚æ•°ï¼Œå¯ä»¥ç”¨è¿™ä¸ªå‡½æ•°æŸ¥çœ‹è®­ç»ƒæ—¶çš„ä¸­é—´å˜é‡
 
-netTransfer = trainNetwork(imdsTrain,layers,options);   %ÑµÁ·Éñ¾­ÍøÂç
+netTransfer = trainNetwork(imdsTrain,layers,options);   %è®­ç»ƒç¥ç»ç½‘ç»œ
 
-YPred = classify(netTransfer,imdsValidation);           %¶Ô²âÊÔÑùÀı½øĞĞÊ¶±ğ
-accuracy = mean(YPred == imdsValidation.Labels)         %Êä³ö×îºóÊ¶±ğµÄÕıÈ·ÂÊ
-resPic=findall(groot, 'Type', 'Figure');                %ÕÒ³ö×îºóÉú³ÉÍ¼Æ¬µÄ¾ä±ú
-saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %±£´æÑµÁ·µÄÍ¼Æ¬
-save(['.\net\' inputArg2 '.mat'],'netTransfer');        %±£´æÑµÁ·ºÃµÄÍøÂç
+YPred = classify(netTransfer,imdsValidation);           %å¯¹æµ‹è¯•æ ·ä¾‹è¿›è¡Œè¯†åˆ«
+accuracy = mean(YPred == imdsValidation.Labels)         %è¾“å‡ºæœ€åè¯†åˆ«çš„æ­£ç¡®ç‡
+resPic=findall(groot, 'Type', 'Figure');                %æ‰¾å‡ºæœ€åç”Ÿæˆå›¾ç‰‡çš„å¥æŸ„
+saveas(resPic,['.\picture\' inputArg2 '.jpg']);                      %ä¿å­˜è®­ç»ƒçš„å›¾ç‰‡
+save(['.\net\' inputArg2 '.mat'],'netTransfer');        %ä¿å­˜è®­ç»ƒå¥½çš„ç½‘ç»œ
 
 
 

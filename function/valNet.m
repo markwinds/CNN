@@ -1,12 +1,12 @@
 function  f= valNet(inputArg1)
-%¶ÁÈ¡ValidationÎÄ¼ş¼ĞÏÂµÄÍ¼Æ¬£¬ÓÃÑµÁ·ºÃµÄÍøÂçÊ¶±ğ£¬Êä³öÅĞ¶Ï´íÎóÍ¼Ïñ
-%²ÎÊı£º inputArg1£ºÔØÈëµÄÍøÂç
-changeSize('Validation');       %½«ÎÄ¼ş¼ĞÏÂµÄÍ¼Ïñ×ª»¯ÎªĞèÒªµÄ´óĞ¡
-digitDatasetPath = fullfile('E:','github','CNN','Validation');		%Ö¸¶¨Ñù±¾¿âµÄÂ·¾¶
-imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%½¨Á¢Ñù±¾¿â
+%è¯»å–Validationæ–‡ä»¶å¤¹ä¸‹çš„å›¾ç‰‡ï¼Œç”¨è®­ç»ƒå¥½çš„ç½‘ç»œè¯†åˆ«ï¼Œè¾“å‡ºåˆ¤æ–­é”™è¯¯å›¾åƒ
+%å‚æ•°ï¼š inputArg1ï¼šè½½å…¥çš„ç½‘ç»œ
+changeSize('Validation');       %å°†æ–‡ä»¶å¤¹ä¸‹çš„å›¾åƒè½¬åŒ–ä¸ºéœ€è¦çš„å¤§å°
+digitDatasetPath = fullfile('E:','github','CNN','Validation');		%æŒ‡å®šæ ·æœ¬åº“çš„è·¯å¾„
+imds = imageDatastore(digitDatasetPath,'IncludeSubfolders',true,'LabelSource','foldernames');%å»ºç«‹æ ·æœ¬åº“
 load('-mat',['E:\github\CNN\net\' inputArg1 '.mat']);
 
-YPred = classify(netTransfer,imds);           %¶Ô²âÊÔÑùÀı½øĞĞÊ¶±ğ
+YPred = classify(netTransfer,imds);           %å¯¹æµ‹è¯•æ ·ä¾‹è¿›è¡Œè¯†åˆ«
 for i=1:length(YPred)
     if YPred(i) ~= imds.Labels(i)
         figure
@@ -20,7 +20,7 @@ for i=1:length(YPred)
         title(['Picture ' titleRoad1 '\' titleRoad2 ' is wrong!!']);
     end
 end
-accuracy = mean(YPred == imds.Labels)         %Êä³ö×îºóÊ¶±ğµÄÕıÈ·ÂÊ
+accuracy = mean(YPred == imds.Labels)         %è¾“å‡ºæœ€åè¯†åˆ«çš„æ­£ç¡®ç‡
 
 end
 
